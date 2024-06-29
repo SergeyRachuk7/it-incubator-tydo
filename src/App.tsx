@@ -4,7 +4,15 @@ import { TaskType, Todolist } from './Todolist';
 import { v1 } from 'uuid';
 export type FilterValuesType = "all" | "completed" | "active";
 
+type TodolistType = {
+  id: string
+  title: string
+  filter: FilterValuesType
+}
+
 function App() {
+
+
 
   let [tasks, setTasks] = useState<Array<TaskType>>([
     { id: v1(), title: "HTMLCSS", isDone: true },
@@ -14,7 +22,7 @@ function App() {
     { id: v1(), title: "CraphQL", isDone: false },
   ]
   )
-  let [filter, setFilter] = useState<FilterValuesType>("all")
+  // let [filter, setFilter] = useState<FilterValuesType>("all")
 
 
   function removeTask(id: string) {
@@ -41,31 +49,47 @@ function App() {
     setTasks([...tasks]);
   }
 
-
-  function changeFilter(value: FilterValuesType) {
-    setFilter(value);
+  function changeFilter(value: FilterValuesType, todolistid: string) {
+    let todolist = todolists.find(tl => tl.id === todolistid);
+    if (todolist) {
+      todolist.filter = value;
+      setTodolists([...todolists]);
+    }
   }
 
-
-
-  let taskForTodolist = tasks;
-  if (filter === "completed") {
-    taskForTodolist = tasks.filter(t => t.isDone === true)
-  }
-
-  if (filter === "active") {
-    taskForTodolist = tasks.filter(t => t.isDone === false)
-  }
-
+  let [todolists, setTodolists] = useState<Array<TodolistType>>([
+    {
+      id: v1(), title: "What to learn", filter: "active"
+    },
+    { id: v1(), title: "What to buy", filter: "completed" },
+  ]);
 
   return (
 
     <div className="App">
+      {
+        todolists.map((tl) => {
+
+          let taskForTodolist = tasks;
+          if (tl.filter === "active") {
+            taskForTodolist = tasks.filter(t => t.isDone === true)
+          }
+
+          if (tl.filter === "completed") {
+            taskForTodolist = tasks.filter(t => t.isDone === false)
+          }
+
+
+
+          return <Todolist key={tl.id} id={tl.id} title={tl.title} tasks={taskForTodolist} removeTask={removeTask} changeFilter={changeFilter} addTask={addTask}
+            changeTaskStatus={changeStatus} filter={tl.filter} />
+
+        })
+      }
+
       <input type="checkbox" />
       <input type="date" />
       <input placeholder='it incubator' />
-      <Todolist title={"What to learn"} tasks={taskForTodolist} removeTask={removeTask} changeFilter={changeFilter} addTask={addTask}
-        changeTaskStatus={changeStatus} filter={filter} />
     </div>
   );
 }
