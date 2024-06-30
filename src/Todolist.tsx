@@ -12,11 +12,12 @@ type PropsType = {
   id: string
   title: string;
   tasks: Array<TaskType>;
-  removeTask: (id: string) => void;
+  removeTask: (id: string, todolistId1: string) => void;
   changeFilter: (value: FilterValuesType, todolistid: string) => void;
-  addTask: (title: string) => void;
-  changeTaskStatus: (taskId: string, isDone: boolean) => void;
+  addTask: (title: string, todolistId1: string) => void;
+  changeTaskStatus: (taskId: string, isDone: boolean, todolistId1: string) => void;
   filter: FilterValuesType
+  removeTodoList: (todolistId1: string) => void
 };
 
 export function Todolist(props: PropsType) {
@@ -30,7 +31,7 @@ export function Todolist(props: PropsType) {
 
   const addTask = () => {
     if (title.trim() !== "") {
-      props.addTask(title.trim());
+      props.addTask(title.trim(), props.id);
       setTitle("");
     } else {
       setError("Title is  required");
@@ -53,10 +54,14 @@ export function Todolist(props: PropsType) {
   const onCompletedClickHandler = () => {
     props.changeFilter("completed", props.id);
   };
+  const removeTodoList = () => {
+    props.removeTodoList(props.id);
+  }
 
   return (
     <div>
       <h3>{props.title}</h3>
+      <button onClick={removeTodoList}>delete</button>
       <div>
         <input
           value={title}
@@ -69,12 +74,9 @@ export function Todolist(props: PropsType) {
       </div>
       <ul>
         {props.tasks.map((t) => {
-          const onClickHandler = () => props.removeTask(t.id);
+          const onClickHandler = () => props.removeTask(t.id, props.id);
           const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeTaskStatus(t.id, e.currentTarget.checked);
-          };
-          const onRemoveHandler = () => {
-            props.removeTask(t.id);
+            props.changeTaskStatus(t.id, e.currentTarget.checked, props.id);
           };
           return (
             <li key={t.id} className={t.isDone ? "is-done" : ""}>
@@ -84,7 +86,7 @@ export function Todolist(props: PropsType) {
                 checked={t.isDone}
               />
               <span>{t.title}</span>
-              <button onClick={onRemoveHandler}>x</button>
+              <button onClick={onClickHandler}>x</button>
             </li>
           );
         })}
