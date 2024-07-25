@@ -14,7 +14,7 @@ export type TodolistType = {
   filter: FilterValuesType
 }
 
-type TaskStateType = {
+export type TasksStateType = {
   [key: string]: Array<TaskType>
 }
 
@@ -98,7 +98,7 @@ function App() {
     }
   }
 
-  let [tasksObj, setTasks] = useState<TaskStateType>({
+  let [tasksObj, setTasks] = useState<TasksStateType>({
     [todolistId1]: [
       { id: v1(), title: "HTMLCSS", isDone: true },
       { id: v1(), title: "JS", isDone: false },
@@ -173,17 +173,11 @@ function App() {
 
         </Grid>
 
-
-
-
       </Container >
 
     </div >
   );
 }
-
-
-
 
 
 export default App;
