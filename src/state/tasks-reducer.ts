@@ -1,7 +1,6 @@
 import { v1 } from 'uuid';
-import { TasksStateType } from './../App';
-import { TodolistType } from '../App';
-import { AddTotodlistActionType, RemoveTodoListActionType } from './todoists-reducer';
+import { TasksStateType } from '../AppWithRedux';
+import { AddTotodlistActionType, RemoveTodoListActionType, todolistId1, todolistId2 } from './todoists-reducer';
 
 export type RemoveTaskActionType = {  
     type: "REMOVE-TASK", 
@@ -34,7 +33,19 @@ export type ChangeTaskTitleActionType = {
 
 type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType | ChangeTaskTitleActionType | AddTotodlistActionType | RemoveTodoListActionType;
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+const initialState: TasksStateType = {
+      [todolistId1]: [
+      { id: v1(), title: "HTMLCSS", isDone: true },
+      { id: v1(), title: "JS", isDone: false },
+    ],
+    [todolistId2]: [
+      { id: v1(), title: "Milk ", isDone: true },
+      { id: v1(), title: "React Book", isDone: true },
+    ]
+}
+
+
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {  
        case "REMOVE-TASK": { 
              const stateCopy = {...state};   
@@ -54,11 +65,9 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
        case "CHANGE-TASK-STATUS": { 
             let stateCopy = {...state}
 
-            let tasks = stateCopy[action.todolistId];   
-            let task = tasks.find(t => t.id === action.taskId);    
-                if(task) {
-                    task.isDone = action.isDone; 
-                }
+            let tasks = stateCopy[action.todolistId];
+                stateCopy[action.todolistId] = tasks.map(t => t.id === action.taskId ? {...t, isDone: action.isDone} : t )
+        
                 return stateCopy;                         
         }   
        case "CHANGE-TASK-TITLE": { 
@@ -84,7 +93,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
             return stateCopy;
        }                    
         default:
-            throw new Error("I don't understend this action type")
+            return state;
     }
 }
 
