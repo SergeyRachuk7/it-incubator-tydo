@@ -3,18 +3,19 @@ import React, { ChangeEvent, useState } from "react"
 
 
 type EditableSpanPropsType = {
-  title: string
+  value: string
   onChange: (newvalue: string) => void
 }
 
 
-export function EditableleSpan(props: EditableSpanPropsType) {
+export const EditableleSpan = React.memo(function (props: EditableSpanPropsType) {
+  console.log("EditableSpan");
   let [editMode, setEditMode] = useState(false);
-  let [title, setTitle] = useState("");
+  let [title, setTitle] = useState(props.value);
 
   const activateEditMode = () => {
     setEditMode(true)
-    setTitle(props.title);
+    setTitle(props.value);
   }
   const activateViewMode = () => {
     setEditMode(false)
@@ -25,6 +26,6 @@ export function EditableleSpan(props: EditableSpanPropsType) {
   }
 
   return editMode
-    ? <TextField value={title} onChange={changeTitle} onBlur={activateViewMode} autoFocus />
-    : <span onDoubleClick={activateEditMode}> {props.title}   </span >
-}      
+    ? <TextField value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode} />
+    : <span onDoubleClick={activateEditMode}>{props.value}</span >
+})      

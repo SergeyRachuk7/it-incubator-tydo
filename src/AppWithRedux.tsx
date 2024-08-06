@@ -1,5 +1,5 @@
 
-import React, { useReducer, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import './App.css';
 import { TaskType, Todolist } from './Todolist';
 import { v1 } from 'uuid';
@@ -24,31 +24,63 @@ export type TasksStateType = {
 }
 
 function AppWithRedux() {
-  const dispatch = useDispatch();
+
+
+  // let todolistId1 = v1();
+  // let todolistId2 = v1();
+
   const todolists = useSelector<AppRootState, Array<TodolistType>>(state => state.todolist)
+  const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks);
+  const dispatch = useDispatch();
+  console.log(todolists);
 
 
-  function changeFilter(value: FilterValuesType, todolistid: string) {
+
+  const removeTask = useCallback(function (title: string, todolistId: string) {
+    const action = removeTaskAC(title, todolistId);
+    dispatch(action)
+  }, [dispatch]);
+
+
+  const addTask = useCallback(function (title: string, todolistId: string) {
+    const action = addTaskAC(title, todolistId);
+    dispatch(action);
+  }, [dispatch]);
+
+
+  const changeFilter = useCallback(function (value: FilterValuesType, todolistid: string) {
     const action = сhangeTodolisFilterAC(value, todolistid);
     dispatch(action);
-  }
+  }, [dispatch]);
 
-  function removeTodoList(id: string) {
+  const removeTodoList = useCallback(function (id: string) {
     const action = removeTodolistAC(id);
     dispatch(action)
-  }
+  }, [dispatch])
 
-
-  function changeTodoListTitle(id: string, title: string) {
+  const changeTodoListTitle = useCallback(function (id: string, title: string) {
     const action = changeTodolistTitleAC(id, title);
     dispatch(action);
-  }
+  }, [dispatch])
 
-
-  function addTodoList(title: string) {
-    const action = addTodolistAC(title);
+  const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {
+    const action = changeTaskStatusAC(id, isDone, todolistId)
     dispatch(action);
-  }
+  }, [dispatch])
+
+
+  const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+    const action = changeTaskTitleAC(id, newTitle, todolistId);
+    dispatch(action);
+  }, [dispatch])
+
+
+  const addTodoList = useCallback(function (title: string) {
+    const action = addTodolistAC(title);
+    console.log(action);
+    dispatch(action);
+  }, [dispatch]);
+
 
 
   return (
@@ -70,27 +102,22 @@ function AppWithRedux() {
         </Grid>
         <Grid container spacing={10}>
           {
-            todolists.map((tl) => {
-              // let allTodolistTasks = tasks[tl.id];
-              // let taskForTodolist = allTodolistTasks;
-              // if (tl.filter === "active") {
-              //   taskForTodolist = allTodolistTasks.filter(t => t.isDone === false);
-              // }
-              // if (tl.filter === "completed") {
-              //   taskForTodolist = allTodolistTasks.filter(t => t.isDone === true);
-              // }
-              return <Grid item>
+            todolists.map(tl => {
+              let allTodolistTasks = tasks[tl.id];
+              let taskForTodolist = allTodolistTasks;
+
+              return <Grid item key={tl.id}>
                 <Paper style={{ padding: "10px" }}>
                   <Todolist
                     key={tl.id}
                     id={tl.id}
                     title={tl.title}
-                    // tasks={taskForTodolist}
-                    // removeTask={removeTask}
+                    tasks={taskForTodolist}
+                    removeTask={removeTask}
                     changeFilter={changeFilter}
-                    // addTask={addTask}
-                    // changeTaskStatus={changeStatus}
-                    // changeTaskTitle={changeTaskTitle}
+                    addTask={addTask}
+                    changeTaskStatus={changeStatus}
+                    changeTaskTitle={changeTaskTitle}
                     filter={tl.filter}
                     removeTodoList={removeTodoList}
                     changeTodoListTitle={changeTodoListTitle} />
@@ -105,6 +132,5 @@ function AppWithRedux() {
     </div >
   );
 }
-
 
 export default AppWithRedux;
