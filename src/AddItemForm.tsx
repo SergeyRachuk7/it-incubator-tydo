@@ -14,7 +14,7 @@ export const AddItemForm = React.memo((props: AddItemFromPropsType) => {
 
   const addItem = () => {
     if (title.trim() !== "") {
-      props.addItem(title.trim());
+      props.addItem(title);
       setTitle("");
     } else {
       setError("Title is required");

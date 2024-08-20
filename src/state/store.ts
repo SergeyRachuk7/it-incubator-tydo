@@ -1,18 +1,16 @@
+
 import { createStore } from 'redux';
-// import { store } from './store';
-import { combineReducers, } from "redux"
+import { combineReducers } from "redux";
 import { todoListsReducer } from './todoists-reducer';
 import { tasksReducer } from './tasks-reducer';
 
 const rootReducer = combineReducers({
-    todolist :todoListsReducer, 
     tasks: tasksReducer, 
-}) 
+    todolists: todoListsReducer
+}); 
 
- export type AppRootState = ReturnType<typeof rootReducer>
- 
- export const store = createStore(rootReducer); 
-
+export const store = createStore(rootReducer); 
+export type AppRootState = ReturnType<typeof rootReducer>
 
 // @ts-expect-error
 window.store = store;

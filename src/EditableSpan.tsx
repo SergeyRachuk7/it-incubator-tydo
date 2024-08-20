@@ -22,7 +22,7 @@ export const EditableleSpan = React.memo(function (props: EditableSpanPropsType)
     props.onChange(title);
   }
   const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value)
+    setTitle(e.currentTarget.value);
   }
 
   return editMode

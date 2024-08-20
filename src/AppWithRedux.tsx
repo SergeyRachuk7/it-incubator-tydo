@@ -29,7 +29,7 @@ function AppWithRedux() {
   // let todolistId1 = v1();
   // let todolistId2 = v1();
 
-  const todolists = useSelector<AppRootState, Array<TodolistType>>(state => state.todolist)
+  const todolists = useSelector<AppRootState, Array<TodolistType>>(state => state.todolists)
   const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks);
   const dispatch = useDispatch();
   console.log(todolists);
@@ -133,4 +133,4 @@ function AppWithRedux() {
   );
 }
 
-export default AppWithRedux;
+export default AppWithRedux;  
