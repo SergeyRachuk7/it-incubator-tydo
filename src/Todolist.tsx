@@ -3,8 +3,8 @@ import { CheckBox, Delete } from "@mui/icons-material";
 import { Button, Checkbox, IconButton } from "@mui/material";
 import React, { ChangeEvent, KeyboardEvent, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddItemForm } from "./AddItemForm";
-import { TasksStateType, TodolistType, FilterValuesType } from "./AppWithRedux";
+import { AddItemForm } from "./AdditemForm/AddItemForm";
+import { TasksStateType, TodolistType, FilterValuesType } from "./AppWithRedux/AppWithRedux";
 
 
 import { EditableleSpan } from "./EditableSpan";

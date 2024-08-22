@@ -4,7 +4,7 @@ import React, { useReducer, useState } from 'react';
 import './App.css';
 import { TaskType, Todolist } from './Todolist';
 import { v1 } from 'uuid';
-import { AddItemForm } from './AddItemForm';
+import { AddItemForm } from './AdditemForm/AddItemForm';
 import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import { addTodolistAC, changeTodolistTitleAC, removeTodolistAC, todoListsReducer, сhangeTodolisFilterAC } from './state/todoists-reducer';
@@ -75,7 +75,7 @@ function AppWitchReducers() {
   }
 
 
-  let removeTodoList = (id: string) => {
+  function removeTodoList(id: string) {
     const action = removeTodolistAC(id);
     dispatchToTasksReducer(action);
     dispatchTodolistsReducer(action);
@@ -149,4 +149,4 @@ function AppWitchReducers() {
 }
 
 
-// export default AppWitchReducers;
+export default AppWitchReducers;
